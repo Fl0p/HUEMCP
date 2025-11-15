@@ -17,6 +17,10 @@ interface SetLightStateArgs {
   saturation?: number;
 }
 
+interface CompleteBridgeSetupArgs {
+  bridge_ip: string;
+}
+
 export class HueMCPServer {
   private server: Server;
   private configManager: ConfigManager;
@@ -70,10 +74,24 @@ export class HueMCPServer {
           tools: [
             {
               name: "discover_bridge",
-              description: "Discover Philips Hue Bridge on the network and configure connection",
+              description: "Discover Philips Hue Bridge on the network. Returns IP address. After this, you need to press the button on the bridge and call complete_bridge_setup.",
               inputSchema: {
                 type: "object",
                 properties: {},
+              },
+            },
+            {
+              name: "complete_bridge_setup",
+              description: "Complete Hue Bridge setup by pressing the link button and creating API key. Call this after discover_bridge and pressing the physical button on the bridge.",
+              inputSchema: {
+                type: "object",
+                properties: {
+                  bridge_ip: {
+                    type: "string",
+                    description: "IP address of the Hue Bridge (from discover_bridge)",
+                  },
+                },
+                required: ["bridge_ip"],
               },
             },
           ],
@@ -85,10 +103,24 @@ export class HueMCPServer {
         tools: [
           {
             name: "discover_bridge",
-            description: "Re-discover and reconfigure Hue Bridge connection",
+            description: "Re-discover Philips Hue Bridge on the network. Returns IP address.",
             inputSchema: {
               type: "object",
               properties: {},
+            },
+          },
+          {
+            name: "complete_bridge_setup",
+            description: "Reconfigure Hue Bridge connection by pressing the link button and creating API key.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                bridge_ip: {
+                  type: "string",
+                  description: "IP address of the Hue Bridge (from discover_bridge)",
+                },
+              },
+              required: ["bridge_ip"],
             },
           },
           {
@@ -148,16 +180,25 @@ export class HueMCPServer {
           case "discover_bridge": {
             return await this.handleDiscoverBridge();
           }
+          case "complete_bridge_setup": {
+            const { bridge_ip } = args as unknown as CompleteBridgeSetupArgs;
+            
+            if (!bridge_ip) {
+              throw new Error("bridge_ip is required");
+            }
+            
+            return await this.handleCompleteBridgeSetup(bridge_ip);
+          }
           case "list_lights": {
             if (!this.bridgeClient) {
-              throw new Error("Bridge not configured. Run discover_bridge first.");
+              throw new Error("Bridge not configured. Run discover_bridge and complete_bridge_setup first.");
             }
             const lights = await this.bridgeClient.listLights();
             return remapLightsToMCP(lights);
           }
           case "set_light_state": {
             if (!this.bridgeClient) {
-              throw new Error("Bridge not configured. Run discover_bridge first.");
+              throw new Error("Bridge not configured. Run discover_bridge and complete_bridge_setup first.");
             }
             const { light_id, on, brightness, hue, saturation } = args as unknown as SetLightStateArgs;
             
@@ -193,24 +234,71 @@ export class HueMCPServer {
   }
 
   async handleDiscoverBridge() {
-    const result = await this.bridgeDiscovery.discoverAndConfigure();
+    const result = await this.bridgeDiscovery.discover();
     
-    if (result.success && result.bridgeIp && result.apiKey) {
-      // Reinitialize bridge client with new config
-      this.bridgeClient = new HueBridgeClient(result.bridgeIp, result.apiKey);
-      
-      // Notify client that tools list has changed
-      await this.server.notification({
-        method: "notifications/tools/list_changed",
-        params: {}
-      });
+    if (result.success && result.bridgeIp) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: `✅ Found Hue Bridge at IP: ${result.bridgeIp}\n\n` +
+                  `⚠️ IMPORTANT: Please press the physical LINK BUTTON on your Hue Bridge now!\n` +
+                  `Then call complete_bridge_setup with bridge_ip="${result.bridgeIp}" within 30 seconds.`,
+          },
+        ],
+      };
     }
     
     return {
       content: [
         {
           type: "text",
-          text: result.message,
+          text: `❌ ${result.message}`,
+        },
+      ],
+      isError: true,
+    };
+  }
+
+  async handleCompleteBridgeSetup(bridgeIp: string) {
+    const configResult = await this.bridgeDiscovery.configure(bridgeIp);
+    
+    if (!configResult.success || !configResult.apiKey) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: `❌ ${configResult.message}`,
+          },
+        ],
+        isError: true,
+      };
+    }
+
+    // Save configuration
+    const configPath = await this.configManager.save({
+      bridgeIp: bridgeIp,
+      apiKey: configResult.apiKey,
+    });
+
+    // Reinitialize bridge client with new config
+    this.bridgeClient = new HueBridgeClient(bridgeIp, configResult.apiKey);
+    
+    // Notify client that tools list has changed
+    await this.server.notification({
+      method: "notifications/tools/list_changed",
+      params: {}
+    });
+    
+    return {
+      content: [
+        {
+          type: "text",
+          text: `✅ Bridge configured successfully!\n\n` +
+                `Bridge IP: ${bridgeIp}\n` +
+                `API Key: ${configResult.apiKey}\n` +
+                `Config saved to: ${configPath}\n\n` +
+                `You can now use list_lights and set_light_state tools.`,
         },
       ],
     };
