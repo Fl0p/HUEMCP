@@ -61,6 +61,10 @@
     {
       "name": "list_zones",
       "description": "List all available Philips Hue zones"
+    },
+    {
+      "name": "update_zone",
+      "description": "Control all lights in a zone at once. Can set on/off state, brightness, and color for the entire zone."
     }
   ],
   "keywords": [

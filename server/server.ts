@@ -22,6 +22,14 @@ interface SetLightStateArgs {
   saturation?: number;
 }
 
+interface UpdateZoneArgs {
+  zone_id: string;
+  on?: boolean;
+  brightness?: number;
+  hue?: number;
+  saturation?: number;
+}
+
 interface CompleteBridgeSetupArgs {
   bridge_ip: string;
 }
@@ -144,6 +152,32 @@ export class HueMCPServer {
                 {
                   type: "text",
                   text: JSON.stringify(zones, null, 2),
+                },
+              ],
+            };
+          }
+          case "update_zone": {
+            if (!this.bridgeClient) {
+              throw new Error("Bridge not configured. Run discover_bridge and complete_bridge_setup first.");
+            }
+            const { zone_id, on, brightness, hue, saturation } = args as unknown as UpdateZoneArgs;
+            
+            if (!zone_id) {
+              throw new Error("zone_id is required");
+            }
+
+            await this.bridgeClient.updateZone(zone_id, {
+              on,
+              brightness,
+              hue,
+              saturation,
+            });
+            
+            return {
+              content: [
+                {
+                  type: "text",
+                  text: `✅ Zone ${zone_id} updated successfully`,
                 },
               ],
             };

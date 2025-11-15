@@ -61,6 +61,13 @@ export interface SetLightStateParams {
   saturation?: number;
 }
 
+export interface UpdateZoneParams {
+  on?: boolean;
+  brightness?: number;
+  hue?: number;
+  saturation?: number;
+}
+
 export class HueBridgeClient {
   constructor(
     private bridgeIp: string,
@@ -124,6 +131,29 @@ export class HueBridgeClient {
     }
 
     return zones;
+  }
+
+  async updateZone(zoneId: string, params: UpdateZoneParams): Promise<void> {
+    const action: LightState = {};
+    if (params.on !== undefined) action.on = params.on;
+    if (params.brightness !== undefined) action.bri = params.brightness;
+    if (params.hue !== undefined) action.hue = params.hue;
+    if (params.saturation !== undefined) action.sat = params.saturation;
+
+    const response = await fetch(
+      `http://${this.bridgeIp}/api/${this.apiKey}/groups/${zoneId}/action`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(action),
+      }
+    );
+
+    const result = (await response.json()) as Array<{ error?: { description: string } }>;
+
+    if (result[0]?.error) {
+      throw new Error(result[0].error.description);
+    }
   }
 }
 
