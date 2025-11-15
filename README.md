@@ -12,40 +12,47 @@ MCP server for controlling Philips Hue smart lights.
 
 ## Quick Start
 
-### Option 1: Auto-configuration (Recommended)
+### For Claude Desktop
 
-Install the bundle in Cursor and use built-in tools:
-1. Use `discover_bridge` tool to find your Hue Bridge
-2. Press the physical button on your Hue Bridge
-3. Use `complete_bridge_setup` tool to create API key
+1. **Download and install** the MCPB bundle from releases
+2. **Configuration** (choose one):
+   - **Option A**: Enter Bridge IP and API key in configuration window during installation
+   - **Option B**: Skip configuration and use built-in tools:
+     - Use `discover_bridge` tool to find your Hue Bridge
+     - Press the physical button on your Hue Bridge
+     - Use `complete_bridge_setup` tool to create API key
 
-### Option 2: Manual configuration via ENV variables
+### For Other MCP Clients (e.g., Cursor)
 
-If you already know your Bridge IP and API key:
+1. **Clone repository and install dependencies:**
 
 ```bash
-# Copy example env file
-cp .env.example .env
-
-# Edit .env with your values
-# HUE_BRIDGE_IP=192.168.1.100
-# HUE_API_KEY=your-api-key
-
-# Install dependencies
+git clone https://github.com/yourusername/HUEMCP.git
+cd HUEMCP
 yarn install
-
-# Build bundle
-yarn build
-
-# Run in development mode with ENV variables
-export HUE_BRIDGE_IP="your-bridge-ip"
-export HUE_API_KEY="your-api-key"
-yarn dev
 ```
 
-Environment variables take precedence over saved configuration.
+2. **Setup** (choose one):
 
-**Need to get Bridge IP and API key manually?** See [Manual Setup Guide](./docs/manual-setup.md) for step-by-step instructions using mDNS and curl.
+   **Option A: Interactive setup (Recommended)**
+   ```bash
+   yarn setup
+   ```
+   Follow the interactive prompts to configure your Bridge.
+
+   **Option B: Manual configuration via ENV variables**
+   ```bash
+   export HUE_BRIDGE_IP="your-bridge-ip"
+   export HUE_API_KEY="your-api-key"
+   ```
+
+3. **Start the server:**
+
+```bash
+yarn start
+```
+
+**Need Bridge IP and API key?** See [Manual Setup Guide](./docs/manual-setup.md) for step-by-step instructions using mDNS and curl.
 
 ## Technical Details
 

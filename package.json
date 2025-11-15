@@ -6,6 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
+    "start": "tsc && node dist/index.js",
+    "setup": "tsc && node dist/index.js setup",
     "dev": "NODE_ENV=development tsc && NODE_ENV=development node dist/index.js",
     "dev:mcp": "NODE_ENV=development tsc && NODE_ENV=development node dist/index.js start",
     "dev:setup": "NODE_ENV=development tsc && NODE_ENV=development node dist/index.js setup",
