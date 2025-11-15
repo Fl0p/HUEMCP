@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "description": "Control Philips Hue lights through MCP",
   "author": {
-    "name": "Your Name"
+    "name": "Fl0p"
   },
   "server": {
     "type": "node",
