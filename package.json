@@ -2,23 +2,28 @@
   "name": "huemcp",
   "version": "0.1.0",
   "description": "Philips Hue MCP Server Bundle",
-  "main": "server/index.js",
+  "main": "dist/index.js",
+  "type": "module",
   "scripts": {
-    "dev": "node server/index.js",
-    "build": "mcpb pack . ./build/huemcp.mcpb"
+    "build": "tsc",
+    "dev": "tsc && node dist/index.js",
+    "pack": "mcpb pack . ./build/huemcp.mcpb",
+    "prebuild": "rm -rf dist"
   },
   "keywords": [
     "mcp",
     "philips-hue",
     "smart-home"
   ],
-  "author": "",
+  "author": "Flop",
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^0.6.0"
   },
   "devDependencies": {
-    "@anthropic-ai/mcpb": "latest"
+    "@anthropic-ai/mcpb": "latest",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.0"
   },
   "engines": {
     "node": ">=18.0.0"

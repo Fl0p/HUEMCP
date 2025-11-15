@@ -11,7 +11,38 @@ import {
 const HUE_BRIDGE_IP = process.env.HUE_BRIDGE_IP;
 const HUE_API_KEY = process.env.HUE_API_KEY;
 
+interface LightState {
+  on?: boolean;
+  bri?: number;
+  hue?: number;
+  sat?: number;
+}
+
+interface SetLightStateArgs {
+  light_id: string;
+  on?: boolean;
+  brightness?: number;
+  hue?: number;
+  saturation?: number;
+}
+
+interface HueLight {
+  name: string;
+  state: {
+    on: boolean;
+    bri: number;
+    hue: number;
+    sat: number;
+  };
+}
+
+interface HueLightsResponse {
+  [key: string]: HueLight;
+}
+
 class HueMCPServer {
+  private server: Server;
+
   constructor() {
     this.server = new Server(
       {
@@ -29,7 +60,7 @@ class HueMCPServer {
     this.setupErrorHandling();
   }
 
-  setupErrorHandling() {
+  setupErrorHandling(): void {
     this.server.onerror = (error) => {
       console.error("[MCP Error]", error);
     };
@@ -40,7 +71,7 @@ class HueMCPServer {
     });
   }
 
-  setupHandlers() {
+  setupHandlers(): void {
     // List available tools
     this.server.setRequestHandler(ListToolsRequestSchema, async () => ({
       tools: [
@@ -100,16 +131,17 @@ class HueMCPServer {
           case "list_lights":
             return await this.listLights();
           case "set_light_state":
-            return await this.setLightState(args);
+            return await this.setLightState(args as unknown as SetLightStateArgs);
           default:
             throw new Error(`Unknown tool: ${name}`);
         }
       } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
         return {
           content: [
             {
               type: "text",
-              text: `Error: ${error.message}`,
+              text: `Error: ${errorMessage}`,
             },
           ],
           isError: true,
@@ -127,13 +159,13 @@ class HueMCPServer {
       const response = await fetch(
         `http://${HUE_BRIDGE_IP}/api/${HUE_API_KEY}/lights`
       );
-      const lights = await response.json();
+      const lights = (await response.json()) as HueLightsResponse | Array<{ error: { description: string } }>;
 
-      if (lights[0]?.error) {
+      if (Array.isArray(lights) && lights[0]?.error) {
         throw new Error(lights[0].error.description);
       }
 
-      const lightList = Object.entries(lights)
+      const lightList = Object.entries(lights as HueLightsResponse)
         .map(([id, light]) => `${id}: ${light.name} (${light.state.on ? "ON" : "OFF"})`)
         .join("\n");
 
@@ -146,11 +178,12 @@ class HueMCPServer {
         ],
       };
     } catch (error) {
-      throw new Error(`Failed to list lights: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to list lights: ${errorMessage}`);
     }
   }
 
-  async setLightState(args) {
+  async setLightState(args: SetLightStateArgs) {
     if (!HUE_BRIDGE_IP || !HUE_API_KEY) {
       throw new Error("Hue Bridge IP or API Key not configured");
     }
@@ -161,7 +194,7 @@ class HueMCPServer {
       throw new Error("light_id is required");
     }
 
-    const state = {};
+    const state: LightState = {};
     if (on !== undefined) state.on = on;
     if (brightness !== undefined) state.bri = brightness;
     if (hue !== undefined) state.hue = hue;
@@ -177,7 +210,7 @@ class HueMCPServer {
         }
       );
 
-      const result = await response.json();
+      const result = (await response.json()) as Array<{ error?: { description: string } }>;
 
       if (result[0]?.error) {
         throw new Error(result[0].error.description);
@@ -192,11 +225,12 @@ class HueMCPServer {
         ],
       };
     } catch (error) {
-      throw new Error(`Failed to set light state: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to set light state: ${errorMessage}`);
     }
   }
 
-  async run() {
+  async run(): Promise<void> {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
     console.error("Hue MCP server running on stdio");
