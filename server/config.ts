@@ -40,12 +40,13 @@ export class ConfigManager {
     }
   }
 
-  async save(config: HueConfig): Promise<void> {
+  async save(config: HueConfig): Promise<string> {
     try {
       const dir = dirname(this.configPath);
       await mkdir(dir, { recursive: true });
       await writeFile(this.configPath, JSON.stringify(config, null, 2));
       this.config = config;
+      return this.configPath;
     } catch (error) {
       throw new Error(`Failed to save config: ${error}`);
     }
