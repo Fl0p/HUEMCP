@@ -44,6 +44,8 @@ yarn dev
 
 Environment variables take precedence over saved configuration.
 
+**Need to get Bridge IP and API key manually?** See [Manual Setup Guide](./docs/manual-setup.md) for step-by-step instructions using mDNS and curl.
+
 ## Documentation
 
 Full documentation is available in [docs/](./docs/README.md)

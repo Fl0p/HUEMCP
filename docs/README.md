@@ -30,6 +30,10 @@ export HUE_API_KEY="your-api-key"
 
 **Priority:** Environment variables take precedence over saved configuration file.
 
+### 3. Manual Setup
+
+For manual Bridge discovery and API key generation using command-line tools, see the [Manual Setup Guide](./manual-setup.md).
+
 ## Available Tools
 
 - **discover_bridge** - Find Hue Bridge IP address
