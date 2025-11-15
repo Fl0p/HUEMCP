@@ -70,3 +70,12 @@ export const TOOL_SET_LIGHT_STATE = {
   },
 };
 
+export const TOOL_LIST_ZONES = {
+  name: "list_zones",
+  description: "List all available Philips Hue zones",
+  inputSchema: {
+    type: "object" as const,
+    properties: {},
+  },
+};
+

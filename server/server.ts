@@ -14,6 +14,7 @@ import {
   TOOL_COMPLETE_BRIDGE_SETUP,
   TOOL_LIST_LIGHTS,
   TOOL_SET_LIGHT_STATE,
+  TOOL_LIST_ZONES,
 } from "./tools.js";
 
 interface SetLightStateArgs {
@@ -97,6 +98,7 @@ export class HueMCPServer {
           TOOL_COMPLETE_BRIDGE_SETUP,
           TOOL_LIST_LIGHTS,
           TOOL_SET_LIGHT_STATE,
+          TOOL_LIST_ZONES,
         ],
       };
     });
@@ -144,6 +146,20 @@ export class HueMCPServer {
             });
             
             return remapLightStateToMCP(light_id);
+          }
+          case "list_zones": {
+            if (!this.bridgeClient) {
+              throw new Error("Bridge not configured. Run discover_bridge and complete_bridge_setup first.");
+            }
+            const zones = await this.bridgeClient.listZones();
+            return {
+              content: [
+                {
+                  type: "text",
+                  text: JSON.stringify(zones, null, 2),
+                },
+              ],
+            };
           }
           default:
             throw new Error(`Unknown tool: ${name}`);

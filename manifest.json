@@ -57,6 +57,10 @@
     {
       "name": "set_light_state",
       "description": "Turn a Hue light on/off or set its brightness and color"
+    },
+    {
+      "name": "list_zones",
+      "description": "List all available Philips Hue zones"
     }
   ],
   "keywords": [

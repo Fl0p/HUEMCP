@@ -39,6 +39,21 @@ interface HueLightsResponse {
   [key: string]: HueLight;
 }
 
+interface HueZone {
+  name: string;
+  type: string;
+  class?: string;
+  lights: string[];
+  state?: {
+    all_on: boolean;
+    any_on: boolean;
+  };
+}
+
+interface HueZonesResponse {
+  [key: string]: HueZone;
+}
+
 export interface SetLightStateParams {
   on?: boolean;
   brightness?: number;
@@ -86,6 +101,29 @@ export class HueBridgeClient {
     if (result[0]?.error) {
       throw new Error(result[0].error.description);
     }
+  }
+
+  async listZones(): Promise<HueZonesResponse> {
+    const response = await fetch(
+      `http://${this.bridgeIp}/api/${this.apiKey}/groups`
+    );
+    const groups = (await response.json()) as HueZonesResponse | Array<{ error: { description: string } }>;
+
+    if (Array.isArray(groups) && groups[0]?.error) {
+      throw new Error(groups[0].error.description);
+    }
+
+    const allGroups = groups as HueZonesResponse;
+    const zones: HueZonesResponse = {};
+
+    // Filter only zones (type "Zone")
+    for (const [id, group] of Object.entries(allGroups)) {
+      if (group.type === "Zone") {
+        zones[id] = group;
+      }
+    }
+
+    return zones;
   }
 }
 
