@@ -1,9 +1,28 @@
 #!/usr/bin/env node
 
 import { HueMCPServer } from "./server.js";
+import { ConfigManager } from "./config.js";
+import { BridgeDiscovery } from "./bridge-discovery.js";
 
 // Smart launcher - check command line arguments
 const args = process.argv.slice(2);
+
+async function runSetup() {
+  console.log("🔧 Starting Hue Bridge setup...\n");
+  
+  const configManager = new ConfigManager();
+  const discovery = new BridgeDiscovery(configManager);
+  
+  const result = await discovery.discoverAndConfigure();
+  
+  if (result.success) {
+    console.log("\n✅ Setup completed successfully!");
+    console.log("You can now start the server with: huemcp start");
+  } else {
+    console.error("\n❌ Setup failed:", result.message);
+    process.exit(1);
+  }
+}
 
 async function main() {
   // Parse command
@@ -11,7 +30,7 @@ async function main() {
 
   switch (command) {
     case "setup":
-      console.log("Setup command coming soon...");
+      await runSetup();
       process.exit(0);
       break;
 
@@ -48,14 +67,10 @@ Commands:
   setup      Configure Hue Bridge connection
   help       Show this help message
 
-Environment Variables:
-  HUE_BRIDGE_IP    IP address of your Hue Bridge
-  HUE_API_KEY      API key for authentication
-
 Examples:
-  huemcp              # Start server
-  huemcp start        # Start server
-  huemcp setup        # Run configuration wizard
+  huemcp setup        # Run configuration wizard (first time)
+  huemcp start        # Start MCP server
+  huemcp              # Start MCP server (default)
 `);
 }
 
