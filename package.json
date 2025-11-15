@@ -1,8 +1,21 @@
 {
-  "name": "huemcp",
+  "name": "HUEMCP",
   "version": "0.1.0",
-  "description": "Philips Hue MCP Server Bundle for controlling Philips Hue smart lights",
+  "description": "Philips Hue MCP Server for controlling Philips Hue smart lights",
   "main": "dist/index.js",
+  "author": {
+    "name": "Fl0p",
+    "email": "flopsmp@gmail.com",
+    "url": "https://github.com/Fl0p/HUEMCP"
+  },
+  "license": "MIT",
+  "keywords": [
+    "mcp",
+    "philips-hue",
+    "smart-home",
+    "lighting",
+    "smart-lights"
+  ],
   "type": "module",
   "scripts": {
     "build": "tsc",
@@ -16,15 +29,6 @@
     "mcpb": "yarn build && yarn manifest && mcpb pack . ./build/huemcp.mcpb",
     "clean": "rm -rf dist"
   },
-  "keywords": [
-    "mcp",
-    "philips-hue",
-    "smart-home",
-    "lighting",
-    "smart-lights"
-  ],
-  "author": "Flop",
-  "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^0.6.0",
     "bonjour-service": "^1.3.0",

@@ -3,7 +3,7 @@
   "name": "huemcp",
   "display_name": "Philips Hue MCP Server",
   "version": "0.1.0",
-  "description": "Control Philips Hue lights through MCP",
+  "description": "Philips Hue MCP Server for controlling Philips Hue smart lights",
   "author": {
     "name": "Fl0p",
     "email": "flopsmp@gmail.com",
@@ -76,9 +76,11 @@
     }
   ],
   "keywords": [
+    "mcp",
     "philips-hue",
     "smart-home",
-    "lighting"
+    "lighting",
+    "smart-lights"
   ],
   "license": "MIT"
 }

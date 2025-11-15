@@ -260,6 +260,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"HUEMCP@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "HUEMCP@workspace:."
+  dependencies:
+    "@anthropic-ai/mcpb": "npm:latest"
+    "@modelcontextprotocol/sdk": "npm:^0.6.0"
+    "@types/bonjour": "npm:^3.5.13"
+    "@types/node": "npm:^20.0.0"
+    bonjour-service: "npm:^1.3.0"
+    dotenv: "npm:^17.2.3"
+    typescript: "npm:^5.3.0"
+  languageName: unknown
+  linkType: soft
+
 "ansi-escapes@npm:^4.3.2":
   version: 4.3.2
   resolution: "ansi-escapes@npm:4.3.2"
@@ -464,20 +478,6 @@ __metadata:
   checksum: 10c0/fc6f2715fe188d091274b5ffc8b3657bd85c63e969daa68ccb77afb05b071a4b62841acb7a21e417b5539014dff2ebf9550f0b14a9ff126f2734a7c1387f8e19
   languageName: node
   linkType: hard
-
-"huemcp@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "huemcp@workspace:."
-  dependencies:
-    "@anthropic-ai/mcpb": "npm:latest"
-    "@modelcontextprotocol/sdk": "npm:^0.6.0"
-    "@types/bonjour": "npm:^3.5.13"
-    "@types/node": "npm:^20.0.0"
-    bonjour-service: "npm:^1.3.0"
-    dotenv: "npm:^17.2.3"
-    typescript: "npm:^5.3.0"
-  languageName: unknown
-  linkType: soft
 
 "iconv-lite@npm:0.7.0":
   version: 0.7.0
