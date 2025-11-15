@@ -262,10 +262,15 @@ export class HueMCPServer {
       params: {}
     });
     
+    // Truncate API key for security (show first 3 and last 3 chars)
+    const truncatedKey = configResult.apiKey.length > 6 
+      ? `${configResult.apiKey.slice(0, 3)}...${configResult.apiKey.slice(-3)}`
+      : '***';
+    
     return createMCPResponse(
       `✅ Bridge configured successfully!\n\n` +
       `Bridge IP: ${bridgeIp}\n` +
-      `API Key: ${configResult.apiKey}\n` +
+      `API Key: ${truncatedKey}\n` +
       `Config saved to: ${configPath}\n\n` +
       `You can now use list_lights and set_light_state tools.`
     );
