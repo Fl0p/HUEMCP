@@ -14,7 +14,7 @@ MCP server for controlling Philips Hue smart lights.
 
 ### For Claude Desktop
 
-1. **Download and install** the MCPB bundle from releases
+1. **Download and install** the MCPB bundle from [releases](https://github.com/Fl0p/HUEMCP/releases)
 2. **Configuration** (choose one):
    - **Option A**: Enter Bridge IP and API key in configuration window during installation
    - **Option B**: Skip configuration and use built-in tools:
