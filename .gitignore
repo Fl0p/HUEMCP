@@ -140,3 +140,6 @@ vite.config.ts.timestamp-*
 
 # MCPB bundles
 *.mcpb
+
+# ignore gitpmoji directory
+.gitpmoji
