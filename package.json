@@ -9,7 +9,9 @@
     "dev": "tsc && node dist/index.js",
     "dev:mcp": "tsc && node dist/index.js start",
     "dev:setup": "tsc && node dist/index.js setup",
-    "mcpb": "tsc && mcpb pack . ./build/huemcp.mcpb",
+    "manifest": "node scripts/generate-manifest.js",
+    "build:manifest": "yarn build && yarn manifest",
+    "mcpb": "yarn build && yarn manifest && mcpb pack . ./build/huemcp.mcpb",
     "clean": "rm -rf dist"
   },
   "keywords": [
