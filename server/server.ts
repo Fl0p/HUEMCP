@@ -10,11 +10,8 @@ import { ConfigManager } from "./config.js";
 import { BridgeDiscovery } from "./bridge-discovery.js";
 import { Logger } from "./logger.js";
 import {
-  TOOL_DISCOVER_BRIDGE,
-  TOOL_COMPLETE_BRIDGE_SETUP,
-  TOOL_LIST_LIGHTS,
-  TOOL_SET_LIGHT_STATE,
-  TOOL_LIST_ZONES,
+  TOOLS_SETUP,
+  TOOLS_ALL,
 } from "./tools.js";
 
 interface SetLightStateArgs {
@@ -84,22 +81,12 @@ export class HueMCPServer {
       if (!this.configManager.isConfigured()) {
         // No config - only discovery tools available
         return {
-          tools: [
-             TOOL_DISCOVER_BRIDGE,
-             TOOL_COMPLETE_BRIDGE_SETUP,
-          ],
+          tools: TOOLS_SETUP
         };
       }
-
       // Config exists - show all tools
       return {
-        tools: [
-          TOOL_DISCOVER_BRIDGE,
-          TOOL_COMPLETE_BRIDGE_SETUP,
-          TOOL_LIST_LIGHTS,
-          TOOL_SET_LIGHT_STATE,
-          TOOL_LIST_ZONES,
-        ],
+        tools: TOOLS_ALL
       };
     });
 

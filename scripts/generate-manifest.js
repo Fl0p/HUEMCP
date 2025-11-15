@@ -2,12 +2,7 @@
 import { writeFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import {
-  TOOL_DISCOVER_BRIDGE,
-  TOOL_COMPLETE_BRIDGE_SETUP,
-  TOOL_LIST_LIGHTS,
-  TOOL_SET_LIGHT_STATE
-} from '../dist/tools.js';
+import { TOOLS_ALL } from '../dist/tools.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -53,24 +48,10 @@ const manifest = {
       sensitive: true
     }
   },
-  tools: [
-    {
-      name: TOOL_DISCOVER_BRIDGE.name,
-      description: TOOL_DISCOVER_BRIDGE.description
-    },
-    {
-      name: TOOL_COMPLETE_BRIDGE_SETUP.name,
-      description: TOOL_COMPLETE_BRIDGE_SETUP.description
-    },
-    {
-      name: TOOL_LIST_LIGHTS.name,
-      description: TOOL_LIST_LIGHTS.description
-    },
-    {
-      name: TOOL_SET_LIGHT_STATE.name,
-      description: TOOL_SET_LIGHT_STATE.description
-    }
-  ],
+  tools: TOOLS_ALL.map(tool => ({
+    name: tool.name,
+    description: tool.description
+  })),
   keywords: ["philips-hue", "smart-home", "lighting"],
   license: "MIT"
 };

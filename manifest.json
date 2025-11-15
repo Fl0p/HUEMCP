@@ -1,9 +1,9 @@
 {
   "manifest_version": "0.3",
-  "name": "HUEMCP",
+  "name": "huemcp",
   "display_name": "Philips Hue MCP Server",
   "version": "0.1.0",
-  "description": "Control Philips Hue lights through MCP with API v2 support via hue-sync",
+  "description": "Control Philips Hue lights through MCP",
   "author": {
     "name": "Fl0p",
     "email": "flopsmp@gmail.com",
@@ -65,13 +65,8 @@
   ],
   "keywords": [
     "philips-hue",
-    "hue-api-v2",
     "smart-home",
-    "lighting",
-    "hue-sync",
-    "smart-lights",
-    "zones",
-    "rooms"
+    "lighting"
   ],
   "license": "MIT"
 }

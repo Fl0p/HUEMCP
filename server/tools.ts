@@ -79,3 +79,23 @@ export const TOOL_LIST_ZONES = {
   },
 };
 
+// Tool groups
+export const TOOLS_SETUP = [
+  TOOL_DISCOVER_BRIDGE,
+  TOOL_COMPLETE_BRIDGE_SETUP,
+];
+
+export const TOOLS_V1 = [
+  TOOL_LIST_LIGHTS,
+  TOOL_SET_LIGHT_STATE,
+];
+
+export const TOOLS_V2 = [
+  TOOL_LIST_ZONES,
+];
+
+export const TOOLS_ALL = [
+  ...TOOLS_SETUP,
+  ...TOOLS_V1,
+  ...TOOLS_V2,
+];
