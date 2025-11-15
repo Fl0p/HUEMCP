@@ -1,9 +1,15 @@
 #!/usr/bin/env node
 
+import dotenv from "dotenv";
 import { HueMCPServer } from "./server.js";
 import { ConfigManager } from "./config.js";
 import { BridgeDiscovery } from "./bridge-discovery.js";
 import { Logger } from "./logger.js";
+
+// Load .env file only in development mode
+if (process.env.NODE_ENV === 'development') {
+  dotenv.config();
+}
 
 // Smart launcher - check command line arguments
 const args = process.argv.slice(2);

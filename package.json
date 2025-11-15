@@ -6,9 +6,9 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc && node dist/index.js",
-    "dev:mcp": "tsc && node dist/index.js start",
-    "dev:setup": "tsc && node dist/index.js setup",
+    "dev": "NODE_ENV=development tsc && NODE_ENV=development node dist/index.js",
+    "dev:mcp": "NODE_ENV=development tsc && NODE_ENV=development node dist/index.js start",
+    "dev:setup": "NODE_ENV=development tsc && NODE_ENV=development node dist/index.js setup",
     "manifest": "node scripts/generate-manifest.js",
     "build:manifest": "yarn build && yarn manifest",
     "mcpb": "yarn build && yarn manifest && mcpb pack . ./build/huemcp.mcpb",
@@ -28,6 +28,7 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^0.6.0",
     "bonjour-service": "^1.3.0",
+    "dotenv": "^17.2.3",
     "hue-sync": "^0.1.3"
   },
   "devDependencies": {

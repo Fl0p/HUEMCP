@@ -1,0 +1,10 @@
+{
+    "mcpServers": {
+    "HUEMCP": {
+      "command": "yarn",
+      "args": [
+        "dev:mcp"
+      ]
+    }
+  }
+}
