@@ -8,6 +8,7 @@ import { HueBridgeClient } from "./hue-bridge-client.js";
 import { remapLightsToMCP, remapLightStateToMCP } from "./mcp-utils.js";
 import { ConfigManager } from "./config.js";
 import { BridgeDiscovery } from "./bridge-discovery.js";
+import { Logger } from "./logger.js";
 
 interface SetLightStateArgs {
   light_id: string;
@@ -26,10 +27,14 @@ export class HueMCPServer {
   private configManager: ConfigManager;
   private bridgeClient: HueBridgeClient | null = null;
   private bridgeDiscovery: BridgeDiscovery;
+  private logger = Logger.getInstance();
 
   constructor() {
     this.configManager = new ConfigManager();
     this.bridgeDiscovery = new BridgeDiscovery(this.configManager);
+    
+    // Enable logging for MCP server
+    this.logger.enable();
     
     this.server = new Server(
       {
@@ -56,10 +61,11 @@ export class HueMCPServer {
 
   setupErrorHandling(): void {
     this.server.onerror = (error) => {
-      console.error("[MCP Error]", error);
+      this.logger.error("MCP Server error", { error: String(error) });
     };
 
     process.on("SIGINT", async () => {
+      this.logger.info("Server shutting down");
       await this.server.close();
       process.exit(0);
     });
@@ -220,6 +226,7 @@ export class HueMCPServer {
         }
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
+        this.logger.error("Tool execution error", { tool: name, error: errorMessage });
         return {
           content: [
             {
@@ -309,11 +316,8 @@ export class HueMCPServer {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
     
-    if (this.configManager.isConfigured()) {
-      console.error("Hue MCP server running on stdio (configured)");
-    } else {
-      console.error("Hue MCP server running on stdio (not configured - run discover_bridge)");
-    }
+    const configured = this.configManager.isConfigured();
+    this.logger.info("Hue MCP server started", { configured });
   }
 }
 

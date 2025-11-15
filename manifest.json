@@ -5,8 +5,15 @@
   "version": "0.1.0",
   "description": "Control Philips Hue lights through MCP",
   "author": {
-    "name": "Fl0p"
+    "name": "Fl0p",
+    "email": "flopsmp@gmail.com",
+    "url": "https://github.com/Fl0p/HUEMCP"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Fl0p/HUEMCP.git"
+  },
+  "icon": "icon.png",
   "server": {
     "type": "node",
     "entry_point": "dist/index.js",
@@ -38,12 +45,20 @@
   },
   "tools": [
     {
+      "name": "discover_bridge",
+      "description": "Discover Philips Hue Bridge on the network"
+    },
+    {
+      "name": "complete_bridge_setup",
+      "description": "Complete Hue Bridge setup by creating API key"
+    },
+    {
       "name": "list_lights",
-      "description": "List all available Hue lights"
+      "description": "List all available Philips Hue lights"
     },
     {
       "name": "set_light_state",
-      "description": "Control a specific Hue light"
+      "description": "Turn a Hue light on/off or set its brightness and color"
     }
   ],
   "keywords": ["philips-hue", "smart-home", "lighting"],

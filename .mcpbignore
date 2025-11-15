@@ -1,0 +1,13 @@
+*.map
+*.d.ts
+*.d.ts.map
+*.log
+.gitattributes
+.gitpmoji/
+/server/
+/build/
+/docs/
+tsconfig.json
+package.tgz
+yarn.lock
+

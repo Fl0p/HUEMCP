@@ -3,6 +3,7 @@
 import { HueMCPServer } from "./server.js";
 import { ConfigManager } from "./config.js";
 import { BridgeDiscovery } from "./bridge-discovery.js";
+import { Logger } from "./logger.js";
 
 // Smart launcher - check command line arguments
 const args = process.argv.slice(2);
@@ -10,8 +11,13 @@ const args = process.argv.slice(2);
 async function runSetup() {
   console.log("🔧 Starting Hue Bridge setup...\n");
   
+  // Enable logging for CLI mode
+  const logger = Logger.getInstance();
+  logger.enable();
+  
   const configManager = new ConfigManager();
   const discovery = new BridgeDiscovery(configManager);
+  discovery.setCliMode(true); // Enable console output for CLI
   
   const result = await discovery.discoverAndConfigure();
   
