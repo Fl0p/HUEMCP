@@ -5,7 +5,6 @@ import {
   ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 import { HueBridgeClient } from "./hue-bridge-client.js";
-import { remapLightsToMCP, remapLightStateToMCP } from "./mcp-utils.js";
 import { ConfigManager } from "./config.js";
 import { BridgeDiscovery } from "./bridge-discovery.js";
 import { Logger } from "./logger.js";
@@ -13,6 +12,20 @@ import {
   TOOLS_SETUP,
   TOOLS_ALL,
 } from "./tools.js";
+
+// Helper function to format MCP responses
+function createMCPResponse(data: string | object, isError: boolean = false) {
+  const isString = typeof data === 'string';
+  
+  return {
+    content: [
+      isString 
+        ? { type: "text" as const, text: data }
+        : { type: "text" as const, text: JSON.stringify(data, null, 2) }
+    ],
+    ...(isError && { isError: true }),
+  };
+}
 
 interface SetLightStateArgs {
   light_id: string;
@@ -121,7 +134,7 @@ export class HueMCPServer {
               throw new Error("Bridge not configured. Run discover_bridge and complete_bridge_setup first.");
             }
             const lights = await this.bridgeClient.listLights();
-            return remapLightsToMCP(lights);
+            return createMCPResponse(lights);
           }
           case "set_light_state": {
             if (!this.bridgeClient) {
@@ -140,21 +153,14 @@ export class HueMCPServer {
               saturation,
             });
             
-            return remapLightStateToMCP(light_id);
+            return createMCPResponse(`✅ Light ${light_id} updated successfully`);
           }
           case "list_zones": {
             if (!this.bridgeClient) {
               throw new Error("Bridge not configured. Run discover_bridge and complete_bridge_setup first.");
             }
             const zones = await this.bridgeClient.listZones();
-            return {
-              content: [
-                {
-                  type: "text",
-                  text: JSON.stringify(zones, null, 2),
-                },
-              ],
-            };
+            return createMCPResponse(zones);
           }
           case "update_zone": {
             if (!this.bridgeClient) {
@@ -173,14 +179,7 @@ export class HueMCPServer {
               saturation,
             });
             
-            return {
-              content: [
-                {
-                  type: "text",
-                  text: `✅ Zone ${zone_id} updated successfully`,
-                },
-              ],
-            };
+            return createMCPResponse(`✅ Zone ${zone_id} updated successfully`);
           }
           default:
             throw new Error(`Unknown tool: ${name}`);
@@ -188,15 +187,7 @@ export class HueMCPServer {
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
         this.logger.error("Tool execution error", { tool: name, error: errorMessage });
-        return {
-          content: [
-            {
-              type: "text",
-              text: `Error: ${errorMessage}`,
-            },
-          ],
-          isError: true,
-        };
+        return createMCPResponse(`Error: ${errorMessage}`, true);
       }
     });
   }
@@ -205,42 +196,21 @@ export class HueMCPServer {
     const result = await this.bridgeDiscovery.discover();
     
     if (result.success && result.bridgeIp) {
-      return {
-        content: [
-          {
-            type: "text",
-            text: `✅ Found Hue Bridge at IP: ${result.bridgeIp}\n\n` +
-                  `⚠️ IMPORTANT: Please press the physical LINK BUTTON on your Hue Bridge now!\n` +
-                  `Then call complete_bridge_setup with bridge_ip="${result.bridgeIp}" within 30 seconds.`,
-          },
-        ],
-      };
+      return createMCPResponse(
+        `✅ Found Hue Bridge at IP: ${result.bridgeIp}\n\n` +
+        `⚠️ IMPORTANT: Please press the physical LINK BUTTON on your Hue Bridge now!\n` +
+        `Then call complete_bridge_setup with bridge_ip="${result.bridgeIp}" within 30 seconds.`
+      );
     }
     
-    return {
-      content: [
-        {
-          type: "text",
-          text: `❌ ${result.message}`,
-        },
-      ],
-      isError: true,
-    };
+    return createMCPResponse(`❌ ${result.message}`, true);
   }
 
   async handleCompleteBridgeSetup(bridgeIp: string) {
     const configResult = await this.bridgeDiscovery.configure(bridgeIp);
     
     if (!configResult.success || !configResult.apiKey) {
-      return {
-        content: [
-          {
-            type: "text",
-            text: `❌ ${configResult.message}`,
-          },
-        ],
-        isError: true,
-      };
+      return createMCPResponse(`❌ ${configResult.message}`, true);
     }
 
     // Save configuration
@@ -258,18 +228,13 @@ export class HueMCPServer {
       params: {}
     });
     
-    return {
-      content: [
-        {
-          type: "text",
-          text: `✅ Bridge configured successfully!\n\n` +
-                `Bridge IP: ${bridgeIp}\n` +
-                `API Key: ${configResult.apiKey}\n` +
-                `Config saved to: ${configPath}\n\n` +
-                `You can now use list_lights and set_light_state tools.`,
-        },
-      ],
-    };
+    return createMCPResponse(
+      `✅ Bridge configured successfully!\n\n` +
+      `Bridge IP: ${bridgeIp}\n` +
+      `API Key: ${configResult.apiKey}\n` +
+      `Config saved to: ${configPath}\n\n` +
+      `You can now use list_lights and set_light_state tools.`
+    );
   }
 
   async run(): Promise<void> {
