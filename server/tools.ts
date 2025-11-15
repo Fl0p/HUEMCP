@@ -116,6 +116,52 @@ export const TOOL_UPDATE_ZONE = {
   },
 };
 
+export const TOOL_LIST_ROOMS = {
+  name: "list_rooms",
+  description: "List all available Philips Hue rooms",
+  inputSchema: {
+    type: "object" as const,
+    properties: {},
+  },
+};
+
+export const TOOL_UPDATE_ROOM = {
+  name: "update_room",
+  description: "Control all lights in a room at once. Can set on/off state, brightness, and color for the entire room.",
+  inputSchema: {
+    type: "object" as const,
+    properties: {
+      room_id: {
+        type: "string",
+        description: "ID of the room to control",
+      },
+      on: {
+        type: "boolean",
+        description: "Turn all lights in room on (true) or off (false)",
+      },
+      brightness: {
+        type: "number",
+        description: "Brightness level (0-254) for all lights in room",
+        minimum: 0,
+        maximum: 254,
+      },
+      hue: {
+        type: "number",
+        description: "Hue value (0-65535) for all lights in room",
+        minimum: 0,
+        maximum: 65535,
+      },
+      saturation: {
+        type: "number",
+        description: "Saturation (0-254) for all lights in room",
+        minimum: 0,
+        maximum: 254,
+      },
+    },
+    required: ["room_id"],
+  },
+};
+
 // Tool groups
 export const TOOLS_SETUP = [
   TOOL_DISCOVER_BRIDGE,
@@ -130,6 +176,8 @@ export const TOOLS_V1 = [
 export const TOOLS_V2 = [
   TOOL_LIST_ZONES,
   TOOL_UPDATE_ZONE,
+  TOOL_LIST_ROOMS,
+  TOOL_UPDATE_ROOM,
 ];
 
 export const TOOLS_ALL = [

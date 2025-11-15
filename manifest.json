@@ -65,6 +65,14 @@
     {
       "name": "update_zone",
       "description": "Control all lights in a zone at once. Can set on/off state, brightness, and color for the entire zone."
+    },
+    {
+      "name": "list_rooms",
+      "description": "List all available Philips Hue rooms"
+    },
+    {
+      "name": "update_room",
+      "description": "Control all lights in a room at once. Can set on/off state, brightness, and color for the entire room."
     }
   ],
   "keywords": [

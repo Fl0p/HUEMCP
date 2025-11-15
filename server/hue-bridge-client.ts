@@ -133,6 +133,29 @@ export class HueBridgeClient {
     return zones;
   }
 
+  async listRooms(): Promise<HueZonesResponse> {
+    const response = await fetch(
+      `http://${this.bridgeIp}/api/${this.apiKey}/groups`
+    );
+    const groups = (await response.json()) as HueZonesResponse | Array<{ error: { description: string } }>;
+
+    if (Array.isArray(groups) && groups[0]?.error) {
+      throw new Error(groups[0].error.description);
+    }
+
+    const allGroups = groups as HueZonesResponse;
+    const rooms: HueZonesResponse = {};
+
+    // Filter only rooms (type "Room")
+    for (const [id, group] of Object.entries(allGroups)) {
+      if (group.type === "Room") {
+        rooms[id] = group;
+      }
+    }
+
+    return rooms;
+  }
+
   async updateZone(zoneId: string, params: UpdateZoneParams): Promise<void> {
     const action: LightState = {};
     if (params.on !== undefined) action.on = params.on;
@@ -142,6 +165,29 @@ export class HueBridgeClient {
 
     const response = await fetch(
       `http://${this.bridgeIp}/api/${this.apiKey}/groups/${zoneId}/action`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(action),
+      }
+    );
+
+    const result = (await response.json()) as Array<{ error?: { description: string } }>;
+
+    if (result[0]?.error) {
+      throw new Error(result[0].error.description);
+    }
+  }
+
+  async updateRoom(roomId: string, params: UpdateZoneParams): Promise<void> {
+    const action: LightState = {};
+    if (params.on !== undefined) action.on = params.on;
+    if (params.brightness !== undefined) action.bri = params.brightness;
+    if (params.hue !== undefined) action.hue = params.hue;
+    if (params.saturation !== undefined) action.sat = params.saturation;
+
+    const response = await fetch(
+      `http://${this.bridgeIp}/api/${this.apiKey}/groups/${roomId}/action`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },

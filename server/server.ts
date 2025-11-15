@@ -43,6 +43,14 @@ interface UpdateZoneArgs {
   saturation?: number;
 }
 
+interface UpdateRoomArgs {
+  room_id: string;
+  on?: boolean;
+  brightness?: number;
+  hue?: number;
+  saturation?: number;
+}
+
 interface CompleteBridgeSetupArgs {
   bridge_ip: string;
 }
@@ -180,6 +188,32 @@ export class HueMCPServer {
             });
             
             return createMCPResponse(`✅ Zone ${zone_id} updated successfully`);
+          }
+          case "list_rooms": {
+            if (!this.bridgeClient) {
+              throw new Error("Bridge not configured. Run discover_bridge and complete_bridge_setup first.");
+            }
+            const rooms = await this.bridgeClient.listRooms();
+            return createMCPResponse(rooms);
+          }
+          case "update_room": {
+            if (!this.bridgeClient) {
+              throw new Error("Bridge not configured. Run discover_bridge and complete_bridge_setup first.");
+            }
+            const { room_id, on, brightness, hue, saturation } = args as unknown as UpdateRoomArgs;
+            
+            if (!room_id) {
+              throw new Error("room_id is required");
+            }
+
+            await this.bridgeClient.updateRoom(room_id, {
+              on,
+              brightness,
+              hue,
+              saturation,
+            });
+            
+            return createMCPResponse(`✅ Room ${room_id} updated successfully`);
           }
           default:
             throw new Error(`Unknown tool: ${name}`);
