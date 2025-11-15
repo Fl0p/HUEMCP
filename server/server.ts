@@ -93,14 +93,8 @@ export class HueMCPServer {
       // Config exists - show all tools
       return {
         tools: [
-          {
-            ...TOOL_DISCOVER_BRIDGE,
-            description: "Re-discover Philips Hue Bridge on the network. Returns IP address.",
-          },
-          {
-            ...TOOL_COMPLETE_BRIDGE_SETUP,
-            description: "Reconfigure Hue Bridge connection by pressing the link button and creating API key.",
-          },
+          TOOL_DISCOVER_BRIDGE,
+          TOOL_COMPLETE_BRIDGE_SETUP,
           TOOL_LIST_LIGHTS,
           TOOL_SET_LIGHT_STATE,
         ],

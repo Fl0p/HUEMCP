@@ -2,7 +2,7 @@
 
 export const TOOL_DISCOVER_BRIDGE = {
   name: "discover_bridge",
-  description: "Discover Philips Hue Bridge on the network. Returns IP address. After this, you need to press the button on the bridge and call complete_bridge_setup.",
+  description: "Discover or re-discover Philips Hue Bridge on the network. Returns IP address. Use this tool for initial setup or to reconfigure the bridge connection. After discovery, press the physical link button on the bridge and call complete_bridge_setup within 30 seconds.",
   inputSchema: {
     type: "object" as const,
     properties: {},
@@ -11,7 +11,7 @@ export const TOOL_DISCOVER_BRIDGE = {
 
 export const TOOL_COMPLETE_BRIDGE_SETUP = {
   name: "complete_bridge_setup",
-  description: "Complete Hue Bridge setup by pressing the link button and creating API key. Call this after discover_bridge and pressing the physical button on the bridge.",
+  description: "Complete or reconfigure Hue Bridge setup by creating API key. Use this tool for initial setup or to reconfigure the bridge connection. Call this after discover_bridge and pressing the physical link button on the bridge (within 30 seconds of pressing the button).",
   inputSchema: {
     type: "object" as const,
     properties: {
