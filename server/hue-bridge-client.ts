@@ -7,11 +7,31 @@ interface LightState {
 
 interface HueLight {
   name: string;
+  type: string;
+  modelid: string;
   state: {
     on: boolean;
-    bri: number;
-    hue: number;
-    sat: number;
+    bri?: number;
+    hue?: number;
+    sat?: number;
+    effect?: string;
+    xy?: number[];
+    ct?: number;
+    alert?: string;
+    colormode?: string;
+    mode?: string;
+    reachable: boolean;
+  };
+  capabilities?: {
+    control?: {
+      mindimlevel?: number;
+      maxlumen?: number;
+      colorgamuttype?: string;
+      ct?: {
+        min: number;
+        max: number;
+      };
+    };
   };
 }
 
