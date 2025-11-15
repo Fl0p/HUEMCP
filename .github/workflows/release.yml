@@ -26,6 +26,9 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
+      - name: Check files integrity
+        run: ls -la
+
       - name: Build binary
         run: yarn mcpb
 
