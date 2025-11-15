@@ -1,0 +1,27 @@
+{
+  "name": "huemcp",
+  "version": "0.1.0",
+  "description": "Philips Hue MCP Server Bundle",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "node server/index.js",
+    "build": "mcpb pack . ./build/huemcp.mcpb"
+  },
+  "keywords": [
+    "mcp",
+    "philips-hue",
+    "smart-home"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.6.0"
+  },
+  "devDependencies": {
+    "@anthropic-ai/mcpb": "latest"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "packageManager": "yarn@4.11.0"
+}
