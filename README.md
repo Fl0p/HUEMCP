@@ -1,13 +1,17 @@
 # Philips Hue MCP Server Bundle
 
-MCP server for controlling Philips Hue smart lights.
+MCP server for controlling Philips Hue smart lights using [hue-sync](https://github.com/jdmg94/Hue-Sync) library.
 
 ## Features
 
-- Discover Hue Bridge automatically
+- **Hue API v2** support with HTTPS
+- Automatic Bridge discovery via mDNS
 - Setup and configure API key
-- List all available Hue lights
-- Control light state (on/off, brightness, color)
+- Control lights (on/off, brightness, color, temperature)
+- Manage **zones** and **rooms**
+- Support for **grouped lights**
+- Entertainment API for gradient lightstrips
+- Scenes management
 
 ## Quick Start
 
@@ -45,6 +49,16 @@ yarn dev
 Environment variables take precedence over saved configuration.
 
 **Need to get Bridge IP and API key manually?** See [Manual Setup Guide](./docs/manual-setup.md) for step-by-step instructions using mDNS and curl.
+
+## Technical Details
+
+This MCP server uses [hue-sync](https://github.com/jdmg94/Hue-Sync) library, which provides:
+- TypeScript implementation of Philips Hue API v2
+- HTTPS support with proper certificate validation
+- mDNS discovery with fallback to remote API
+- Entertainment API for streaming colors to gradient lightstrips
+
+For detailed information about the hue-sync library, see [Hue-Sync Documentation](./docs/hue-sync.md).
 
 ## Documentation
 

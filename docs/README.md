@@ -4,7 +4,16 @@ Complete documentation for Philips Hue MCP Server Bundle.
 
 ## Overview
 
-This MCP server provides integration with Philips Hue smart lighting system, allowing you to control lights through the Model Context Protocol.
+This MCP server provides integration with Philips Hue smart lighting system using [hue-sync](https://github.com/jdmg94/Hue-Sync) library. It supports Hue API v2 with HTTPS, allowing you to control lights, zones, rooms, and scenes through the Model Context Protocol.
+
+### Key Features
+
+- **Hue API v2** with HTTPS support
+- Automatic mDNS discovery with remote API fallback
+- Control individual lights and grouped lights
+- Manage zones and rooms
+- Entertainment API support for gradient lightstrips
+- Scenes management
 
 ## Configuration
 
@@ -44,3 +53,8 @@ For manual Bridge discovery and API key generation using command-line tools, see
 ## Usage in MCP Clients
 
 After configuration, you can control your lights through any MCP-compatible client (e.g., Cursor AI).
+
+## Additional Documentation
+
+- [Hue-Sync Library Documentation](./hue-sync.md) - Detailed guide on the hue-sync library, API coverage, and advanced features
+- [Manual Setup Guide](./manual-setup.md) - Step-by-step instructions for manual Bridge discovery and API key generation

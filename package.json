@@ -1,7 +1,7 @@
 {
   "name": "huemcp",
   "version": "0.1.0",
-  "description": "Philips Hue MCP Server Bundle",
+  "description": "Philips Hue MCP Server Bundle with API v2 support via hue-sync",
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
@@ -17,7 +17,11 @@
   "keywords": [
     "mcp",
     "philips-hue",
-    "smart-home"
+    "hue-api-v2",
+    "smart-home",
+    "hue-sync",
+    "lighting",
+    "smart-lights"
   ],
   "author": "Flop",
   "license": "MIT",
