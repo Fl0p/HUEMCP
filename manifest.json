@@ -1,6 +1,6 @@
 {
   "manifest_version": "0.3",
-  "name": "huemcp",
+  "name": "HUEMCP",
   "display_name": "Philips Hue MCP Server",
   "version": "0.1.0",
   "description": "Control Philips Hue lights through MCP with API v2 support via hue-sync",

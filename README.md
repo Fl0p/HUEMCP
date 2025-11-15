@@ -28,7 +28,7 @@ If you already know your Bridge IP and API key:
 
 ```bash
 # Copy example env file
-cp env.example .env
+cp .env.example .env
 
 # Edit .env with your values
 # HUE_BRIDGE_IP=192.168.1.100
