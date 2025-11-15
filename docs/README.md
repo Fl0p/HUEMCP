@@ -4,16 +4,16 @@ Complete documentation for Philips Hue MCP Server Bundle.
 
 ## Overview
 
-This MCP server provides integration with Philips Hue smart lighting system using [hue-sync](https://github.com/jdmg94/Hue-Sync) library. It supports Hue API v2 with HTTPS, allowing you to control lights, zones, rooms, and scenes through the Model Context Protocol.
+This MCP server provides integration with Philips Hue smart lighting system, allowing you to control lights, zones, and rooms through the Model Context Protocol.
+
+> **Note:** Currently uses Philips Hue API v1. Migration to API v2 via [hue-sync](https://github.com/jdmg94/Hue-Sync) library is planned for future releases.
 
 ### Key Features
 
-- **Hue API v2** with HTTPS support
-- Automatic mDNS discovery with remote API fallback
+- Automatic mDNS discovery of Hue Bridge
 - Control individual lights and grouped lights
 - Manage zones and rooms
-- Entertainment API support for gradient lightstrips
-- Scenes management
+- Brightness and color control
 
 ## Configuration
 
@@ -45,16 +45,27 @@ For manual Bridge discovery and API key generation using command-line tools, see
 
 ## Available Tools
 
-- **discover_bridge** - Find Hue Bridge IP address
-- **complete_bridge_setup** - Setup API key authentication
+### Setup Tools
+- **discover_bridge** - Find Hue Bridge IP address on the network
+- **complete_bridge_setup** - Create and save API key (requires pressing bridge button)
+
+### Light Control
 - **list_lights** - List all available lights
-- **set_light_state** - Control light (on/off, brightness, color)
+- **set_light_state** - Control individual light (on/off, brightness, hue, saturation)
+
+### Zone Control
+- **list_zones** - List all available zones
+- **update_zone** - Control all lights in a zone at once
+
+### Room Control
+- **list_rooms** - List all available rooms
+- **update_room** - Control all lights in a room at once
 
 ## Usage in MCP Clients
 
-After configuration, you can control your lights through any MCP-compatible client (e.g., Cursor AI).
+After configuration, you can control your lights through any MCP-compatible client (e.g., Claude Desktop, Cursor).
 
 ## Additional Documentation
 
-- [Hue-Sync Library Documentation](./hue-sync.md) - Detailed guide on the hue-sync library, API coverage, and advanced features
 - [Manual Setup Guide](./manual-setup.md) - Step-by-step instructions for manual Bridge discovery and API key generation
+- [Hue-Sync Library Documentation](./hue-sync.md) - Reference documentation for hue-sync library (planned for future integration)
