@@ -32,15 +32,13 @@
     "bridge_ip": {
       "type": "string",
       "title": "Hue Bridge IP Address",
-      "description": "IP address of your Philips Hue Bridge",
-      "required": true
+      "description": "IP address of your Philips Hue Bridge. Optional. Use discover_bridge tool if not provided"
     },
     "api_key": {
       "type": "string",
       "title": "Hue API Key",
-      "description": "API key for authenticating with the Hue Bridge",
-      "sensitive": true,
-      "required": true
+      "description": "API key for authenticating with the Hue Bridge. Optional. Use complete_bridge_setup tool if not provided",
+      "sensitive": true
     }
   },
   "tools": [

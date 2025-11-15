@@ -26,6 +26,19 @@ export class ConfigManager {
       return this.config;
     }
 
+    // Check environment variables first
+    const envBridgeIp = process.env.HUE_BRIDGE_IP;
+    const envApiKey = process.env.HUE_API_KEY;
+    
+    if (envBridgeIp && envApiKey) {
+      this.config = {
+        bridgeIp: envBridgeIp,
+        apiKey: envApiKey,
+      };
+      return this.config;
+    }
+
+    // Fall back to config file
     try {
       if (!existsSync(this.configPath)) {
         return null;

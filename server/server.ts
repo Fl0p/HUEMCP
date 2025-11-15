@@ -9,6 +9,12 @@ import { remapLightsToMCP, remapLightStateToMCP } from "./mcp-utils.js";
 import { ConfigManager } from "./config.js";
 import { BridgeDiscovery } from "./bridge-discovery.js";
 import { Logger } from "./logger.js";
+import {
+  TOOL_DISCOVER_BRIDGE,
+  TOOL_COMPLETE_BRIDGE_SETUP,
+  TOOL_LIST_LIGHTS,
+  TOOL_SET_LIGHT_STATE,
+} from "./tools.js";
 
 interface SetLightStateArgs {
   light_id: string;
@@ -75,31 +81,11 @@ export class HueMCPServer {
     // List available tools - dynamic based on configuration
     this.server.setRequestHandler(ListToolsRequestSchema, async () => {
       if (!this.configManager.isConfigured()) {
-        // No config - only discovery tool available
+        // No config - only discovery tools available
         return {
           tools: [
-            {
-              name: "discover_bridge",
-              description: "Discover Philips Hue Bridge on the network. Returns IP address. After this, you need to press the button on the bridge and call complete_bridge_setup.",
-              inputSchema: {
-                type: "object",
-                properties: {},
-              },
-            },
-            {
-              name: "complete_bridge_setup",
-              description: "Complete Hue Bridge setup by pressing the link button and creating API key. Call this after discover_bridge and pressing the physical button on the bridge.",
-              inputSchema: {
-                type: "object",
-                properties: {
-                  bridge_ip: {
-                    type: "string",
-                    description: "IP address of the Hue Bridge (from discover_bridge)",
-                  },
-                },
-                required: ["bridge_ip"],
-              },
-            },
+             TOOL_DISCOVER_BRIDGE,
+             TOOL_COMPLETE_BRIDGE_SETUP,
           ],
         };
       }
@@ -108,71 +94,15 @@ export class HueMCPServer {
       return {
         tools: [
           {
-            name: "discover_bridge",
+            ...TOOL_DISCOVER_BRIDGE,
             description: "Re-discover Philips Hue Bridge on the network. Returns IP address.",
-            inputSchema: {
-              type: "object",
-              properties: {},
-            },
           },
           {
-            name: "complete_bridge_setup",
+            ...TOOL_COMPLETE_BRIDGE_SETUP,
             description: "Reconfigure Hue Bridge connection by pressing the link button and creating API key.",
-            inputSchema: {
-              type: "object",
-              properties: {
-                bridge_ip: {
-                  type: "string",
-                  description: "IP address of the Hue Bridge (from discover_bridge)",
-                },
-              },
-              required: ["bridge_ip"],
-            },
           },
-          {
-            name: "list_lights",
-            description: "List all available Philips Hue lights",
-            inputSchema: {
-              type: "object",
-              properties: {},
-            },
-          },
-          {
-            name: "set_light_state",
-            description: "Turn a Hue light on/off or set its brightness and color",
-            inputSchema: {
-              type: "object",
-              properties: {
-                light_id: {
-                  type: "string",
-                  description: "ID of the light to control",
-                },
-                on: {
-                  type: "boolean",
-                  description: "Turn light on (true) or off (false)",
-                },
-                brightness: {
-                  type: "number",
-                  description: "Brightness level (0-254)",
-                  minimum: 0,
-                  maximum: 254,
-                },
-                hue: {
-                  type: "number",
-                  description: "Hue value (0-65535)",
-                  minimum: 0,
-                  maximum: 65535,
-                },
-                saturation: {
-                  type: "number",
-                  description: "Saturation (0-254)",
-                  minimum: 0,
-                  maximum: 254,
-                },
-              },
-              required: ["light_id"],
-            },
-          },
+          TOOL_LIST_LIGHTS,
+          TOOL_SET_LIGHT_STATE,
         ],
       };
     });
