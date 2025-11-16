@@ -2,18 +2,41 @@
 
 This guide explains how to manually discover your Philips Hue Bridge and obtain an API key using command-line tools.
 
-## Finding Your Bridge with mDNS
+## Finding Your Bridge
 
-Use DNS Service Discovery to find your Hue Bridge on the network:
+### Method 1: N-UPnP Discovery (Easiest)
 
-### On macOS/Linux
+Use Philips Hue cloud discovery service:
+
+```bash
+curl https://discovery.meethue.com/
+```
+
+Response example:
+
+```json
+[
+  {
+    "id": "001788fffe123456",
+    "internalipaddress": "192.168.1.100"
+  }
+]
+```
+
+This returns all Hue Bridges on your network. Note the `internalipaddress` value.
+
+### Method 2: Local mDNS Discovery
+
+Use DNS Service Discovery to find your Hue Bridge on the local network:
+
+#### On macOS/Linux
 
 ```bash
 # Using dns-sd (built-in on macOS)
 dns-sd -B _hue._tcp local.
 ```
 
-### On Linux with Avahi
+#### On Linux with Avahi
 
 ```bash
 # Using avahi-browse
