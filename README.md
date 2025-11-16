@@ -73,6 +73,7 @@ Full documentation is available in [docs/](./docs/README.md)
 
 ## Resources
 
+- [Philips Hue API Documentation](./docs/hue-api.md)
 - [Official Philips Hue Developer Documentation](https://developers.meethue.com/)
 - [node-hue-api GitHub Repository](https://github.com/peter-murray/node-hue-api)
 
