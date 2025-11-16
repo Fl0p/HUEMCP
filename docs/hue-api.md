@@ -1,4 +1,4 @@
-# Philips Hue API Documentation (Summary)
+# Philips Hue API Documentation
 
 This document summarizes the endpoints available in the **Philips Hue API v1** and **API v2**.  It lists the major endpoints and provides a high‑level description of request and response structures.  Where available, example field names have been pulled from the official documentation, which is subject to change.  For complete details, refer to the Philips Hue developer portal.
 

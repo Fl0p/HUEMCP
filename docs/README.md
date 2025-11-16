@@ -67,4 +67,5 @@ After configuration, you can control your lights through any MCP-compatible clie
 
 ## Additional Documentation
 
+- [Philips Hue API Documentation](./hue-api.md) - Philips Hue API Documentation V1 + V2 single doc
 - [Manual Setup Guide](./manual-setup.md) - Step-by-step instructions for manual Bridge discovery and API key generation
