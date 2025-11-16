@@ -20,7 +20,7 @@ alwaysApply: true
 The project uses strict ES2022 TypeScript with two-space indentation and single-quoted strings. Keep files in kebab-case, declare classes/interfaces in PascalCase, and name functions/constants in camelCase. Favor utility classes (`Logger`, `ConfigManager`, `BridgeDiscovery`) over duplicate logic, stick with async/await, and run `yarn build` before submitting so the compiler can lint.
 
 ## Testing Guidelines
-There is no dedicated framework yet, so document manual verification (`yarn setup` output, light state changes from `docs/hue-sync.md`) in every PR. New tests should sit next to the modules under `server/` as `*.spec.ts`, run via Node's built-in `node --test`, and mock Hue endpoints so CI avoids hardware.
+There is no dedicated framework yet, so document manual verification (`yarn setup` output, light state changes) in every PR. New tests should sit next to the modules under `server/` as `*.spec.ts`, run via Node's built-in `node --test`, and mock Hue endpoints so CI avoids hardware.
 
 ## Commit & Pull Request Guidelines
 Git history favors an emoji prefix plus an imperative sentence (`🔧 Add…`, `🚸 Improve…`). Keep subjects under 72 characters, mention related issues, and describe code changes plus manual checks in the body. PRs should flag manifest or packaging updates (so reviewers rerun `yarn mcpb`), link to doc edits, and attach CLI logs/screenshots when debugging discovery or setup.

@@ -60,13 +60,12 @@ Currently this MCP server uses direct HTTP calls to Philips Hue API v1.
 
 ### Future Plans
 
-Migration to [hue-sync](https://github.com/jdmg94/Hue-Sync) library is planned, which will provide:
+Migration to [node-hue-api](https://github.com/peter-murray/node-hue-api) library is planned, which will provide:
 - TypeScript implementation of Philips Hue API v2
-- HTTPS support with proper certificate validation
-- Entertainment API for streaming colors to gradient lightstrips
+- Complete API coverage with type definitions
+- Scene management and scheduling
+- Entertainment API for streaming colors
 - Enhanced performance and features
-
-For detailed information about the hue-sync library, see [Hue-Sync Documentation](./docs/hue-sync.md).
 
 ## Documentation
 
