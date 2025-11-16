@@ -71,6 +71,11 @@ Migration to [node-hue-api](https://github.com/peter-murray/node-hue-api) librar
 
 Full documentation is available in [docs/](./docs/README.md)
 
+## Resources
+
+- [Official Philips Hue Developer Documentation](https://developers.meethue.com/)
+- [node-hue-api GitHub Repository](https://github.com/peter-murray/node-hue-api)
+
 ## License
 
 MIT
